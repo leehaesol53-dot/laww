@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>민법·형법·헌법 구분 퀴즈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Noto+Serif+KR:wght@400;600&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eef1f5;--card:#fff;--ink:#1c2430;--mute:#66707e;--line:#d5dbe3;--civil:#1d5fc4;--crim:#c2321f;--const:#8a6a00;--ok:#13794a;--no:#b42318}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161c;--card:#1b212a;--ink:#e8ecf1;--mute:#98a3b1;--line:#2f3844;--civil:#7fb0ff;--crim:#ff8f7d;--const:#e6c25a;--ok:#5fd39a;--no:#ff8f86}}
+:root[data-theme="dark"]{--bg:#12161c;--card:#1b212a;--ink:#e8ecf1;--mute:#98a3b1;--line:#2f3844;--civil:#7fb0ff;--crim:#ff8f7d;--const:#e6c25a;--ok:#5fd39a;--no:#ff8f86}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;line-height:1.6}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.1rem;margin:0 0 4px}
+.sub{color:var(--mute);font-size:.88rem;margin:0 0 16px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.bar i{display:block;height:100%;background:var(--civil);transition:width .3s}
+.meta{display:flex;justify-content:space-between;color:var(--mute);font-size:.85rem;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--mute);border-radius:6px;padding:24px 20px;min-height:150px;font-family:"Noto Serif KR",serif;font-size:1.12rem;line-height:1.9;word-break:keep-all}
+.card.civil{border-left-color:var(--civil)}.card.crim{border-left-color:var(--crim)}.card.const{border-left-color:var(--const)}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+button{font:inherit;cursor:pointer;border-radius:6px;border:2px solid var(--line);background:var(--card);color:var(--ink);padding:12px 0;font-weight:700}
+button:focus-visible{outline:3px solid var(--civil);outline-offset:2px}
+button[data-l="민법"]{color:var(--civil)}button[data-l="형법"]{color:var(--crim)}button[data-l="헌법"]{color:var(--const)}
+button.right{border-color:var(--ok);background:var(--ok);color:#fff}
+button.wrong{border-color:var(--no);text-decoration:line-through}
+button:disabled{cursor:default}
+.res{font-weight:700;margin:6px 0 12px}.res.ok{color:var(--ok)}.res.no{color:var(--no)}
+.nx{width:100%;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.big{font-size:2.4rem;font-weight:700;margin:8px 0}
+</style>
+</head>
+<body>
+<main>
+<h1>민법·형법·헌법 구분 퀴즈</h1>
+<p class="sub">조문을 읽고 어느 법의 조문인지 고르세요.</p>
+<div id="c"></div>
+</main>
+<script>
+const D=[
+["민법","제5조","①미성년자가 법률행위를 함에는 법정대리인의 동의를 얻어야 한다. 그러나 권리만을 얻거나 의무만을 면하는 행위는 그러하지 아니하다. ②전항의 규정에 위반한 행위는 취소할 수 있다."],
+["민법","제390조","채무자가 채무의 내용에 좇은 이행을 하지 아니한 때에는 채권자는 손해배상을 청구할 수 있다. 그러나 채무자의 고의나 과실없이 이행할 수 없게 된 때에는 그러하지 아니하다."],
+["민법","제563조","매매는 당사자 일방이 재산권을 상대방에게 이전할 것을 약정하고 상대방이 그 대금을 지급할 것을 약정함으로써 그 효력이 생긴다."],
+["민법","제750조","고의 또는 과실로 인한 위법행위로 타인에게 손해를 가한 자는 그 손해를 배상할 책임이 있다."],
+["민법","제807조","18세가 된 사람은 혼인할 수 있다."],
+["민법","제834조","부부는 협의에 의하여 이혼할 수 있다."],
+["민법","제1000조 ①","상속에 있어서는 다음 순위로 상속인이 된다. 1. 피상속인의 직계비속 2. 피상속인의 직계존속 3. 피상속인의 형제자매 4. 피상속인의 4촌 이내의 방계혈족"],
+["민법","제1061조","17세에 달하지 못한 자는 유언을 하지 못한다."],
+["민법","제1066조 ①","자필증서에 의한 유언은 유언자가 그 전문과 연월일, 주소, 성명을 자서하고 날인하여야 한다."],
+["민법","제1073조 ①","유언은 유언자가 사망한 때로부터 그 효력이 생긴다."],
+["형법","제1조 ①","범죄의 성립과 처벌은 행위 시의 법률에 따른다."],
+["형법","제9조","14세되지 아니한 자의 행위는 벌하지 아니한다."],
+["형법","제21조 ①","현재의 부당한 침해로부터 자기 또는 타인의 법익(法益)을 방위하기 위하여 한 행위는 상당한 이유가 있는 경우에는 벌하지 아니한다."],
+["형법","제250조 ①","사람을 살해한 자는 사형, 무기 또는 5년 이상의 징역에 처한다."],
+["형법","제257조 ①","사람의 신체를 상해한 자는 7년 이하의 징역, 10년 이하의 자격정지 또는 1천만원 이하의 벌금에 처한다."],
+["형법","제260조 ①","사람의 신체에 대하여 폭행을 가한 자는 2년 이하의 징역, 500만원 이하의 벌금, 구류 또는 과료에 처한다."],
+["형법","제307조 ①","공연히 사실을 적시하여 사람의 명예를 훼손한 자는 2년 이하의 징역이나 금고 또는 500만원 이하의 벌금에 처한다."],
+["형법","제329조","타인의 재물을 절취한 자는 6년 이하의 징역 또는 1천만원 이하의 벌금에 처한다."],
+["형법","제347조 ①","사람을 기망하여 재물의 교부를 받거나 재산상의 이익을 취득한 자는 20년 이하의 징역 또는 5천만원 이하의 벌금에 처한다."],
+["형법","제366조","타인의 재물, 문서 또는 전자기록 등 특수매체기록을 손괴 또는 은닉 기타 방법으로 그 효용을 해한 자는 3년 이하의 징역 또는 700만 원 이하의 벌금에 처한다."],
+["헌법","제1조","①대한민국은 민주공화국이다. ②대한민국의 주권은 국민에게 있고, 모든 권력은 국민으로부터 나온다."],
+["헌법","제10조","모든 국민은 인간으로서의 존엄과 가치를 가지며, 행복을 추구할 권리를 가진다. 국가는 개인이 가지는 불가침의 기본적 인권을 확인하고 이를 보장할 의무를 진다."],
+["헌법","제11조 ①","모든 국민은 법 앞에 평등하다. 누구든지 성별·종교 또는 사회적 신분에 의하여 정치적·경제적·사회적·문화적 생활의 모든 영역에 있어서 차별을 받지 아니한다."],
+["헌법","제12조 ①","모든 국민은 신체의 자유를 가진다. 누구든지 법률에 의하지 아니하고는 체포·구속·압수·수색 또는 심문을 받지 아니하며, 법률과 적법한 절차에 의하지 아니하고는 처벌·보안처분 또는 강제노역을 받지 아니한다."],
+["헌법","제21조 ①","모든 국민은 언론·출판의 자유와 집회·결사의 자유를 가진다."],
+["헌법","제23조 ①","모든 국민의 재산권은 보장된다. 그 내용과 한계는 법률로 정한다."],
+["헌법","제31조 ①","모든 국민은 능력에 따라 균등하게 교육을 받을 권리를 가진다."],
+["헌법","제35조 ①","모든 국민은 건강하고 쾌적한 환경에서 생활할 권리를 가지며, 국가와 국민은 환경보전을 위하여 노력하여야 한다."],
+["헌법","제38조","모든 국민은 법률이 정하는 바에 의하여 납세의 의무를 진다."],
+["헌법","제39조 ①","모든 국민은 법률이 정하는 바에 의하여 국방의 의무를 진다."]
+];
+const CL={"민법":"civil","형법":"crim","헌법":"const"};
+let q,i,s,done;
+function start(){q=D.slice().sort(()=>Math.random()-.5);i=0;s=0;show()}
+function show(){
+ const c=document.getElementById("c");done=false;
+ if(i>=q.length){c.innerHTML='<div class="card"><div>모두 풀었습니다.</div><div class="big">'+s+' / '+q.length+'</div></div><div class="row" style="grid-template-columns:1fr"><button class="nx" onclick="start()">다시 풀기</button></div>';return}
+ const t=q[i][2];
+ c.innerHTML='<div class="bar"><i style="width:'+(i/q.length*100)+'%"></i></div><div class="meta"><span>'+(i+1)+' / '+q.length+'</span><span>맞힌 개수 '+s+'</span></div><div class="card" id="k">'+t+'</div><div class="row">'+["민법","형법","헌법"].map(x=>'<button data-l="'+x+'" onclick="ans(this)">'+x+'</button>').join("")+'</div><div id="r"></div>';
+}
+function ans(b){
+ if(done)return;done=true;
+ const [l,n]=q[i],ok=b.dataset.l===l;
+ if(ok)s++;
+ document.querySelectorAll(".row button").forEach(x=>{x.disabled=true;if(x.dataset.l===l)x.classList.add("right");else if(x===b)x.classList.add("wrong")});
+ document.getElementById("k").classList.add(CL[l]);
+ document.getElementById("r").innerHTML='<p class="res '+(ok?"ok":"no")+'">'+(ok?"정답입니다. ":"아쉽네요. ")+l+" "+n+'</p><button class="nx" onclick="i++;show()">'+(i+1<q.length?"다음 조문":"결과 보기")+'</button>';
+}
+start();
+</script>
+</body>
+</html>
